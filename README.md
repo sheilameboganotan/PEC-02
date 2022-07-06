@@ -1,2 +1,186 @@
 # PEC-02
 Flutter High-Low Game Card
+import 'package:flutter/material.dart';
+import 'dart:math';
+
+class MainFunction extends StatefulWidget {
+  const MainFunction({Key? key}) : super(key: key);
+  @override
+    State<MainFunction> createState() => _HighLowGameState();
+    }
+class _HighLowGameState extends State<MainFunction> {
+
+  String generateRandomString(int len) {
+      var a = Random();
+          const _chars = 'CDHS';
+              return List.generate(len, (index) => _chars[a.nextInt(_chars.length)]).join();
+                }
+                  int randomNumber(int min, int max){
+                      int random = min + Random().nextInt(max - min);
+                          return random;
+                            }
+                              int attempts = 0;
+                                int score = 0;
+                                  int cardValue = 0;
+                                    var letter = 'C';
+                                      int cVal1 = 0;
+                                        var cL1 = "C";
+                                          int cVa2 = 0;
+                                            var cL2 = 'C';
+                                              int cVal3 = 0;
+                                                var cL3 = 'C';
+                                                  int cVal4 = 0;
+                                                    var cL4 = 'C';
+                                                      int cVal5 = 0;
+                                                        var cL5 = 'C';
+  void avoidFirstErorr(){
+      if(attempts == 0){
+            setState(() {
+                    cVal1 = randomNumber(1, 13);
+                            cL1 =generateRandomString(1);
+                                  });
+                                      }
+                                          if(attempts > 1){
+                                                attempts = 0;
+                                                    }
+                                                      }
+                                                        void restart(){
+                                                            setState(() {
+                                                                  cVal5 = 0;
+                                                                        cVal4 = 0;
+                                                                              cVal3 = 0;
+                                                                                    cVal2 = 0;
+                                                                                          cL5 = 'C';
+                                                                                                cL4 = 'C';
+                                                                                                      cL3 = 'C';
+                                                                                                            cL2 = 'C';
+                                                                                                                  cardValue = 0;
+                                                                                                                        letter = 'C';
+                                                                                                                              score = 0;
+                                                                                                                                  });
+                                                                                                                                    }
+  void transfer(){
+      cVal5 = cVal4;
+          cL5 = cL4;
+    cVal4 = cVal3;
+        cL4 = cL3;
+    cVal3 = cVal2;
+        cL3 = cL2;
+    cVal2 = cVal1;
+        cL2 = cL1;
+    cVal1 = cardValue;
+        cL1 = letter;
+    cardValue = 0;
+        letter = 'C';
+          }
+
+
+  showAlert(BuildContext context) {
+      showDialog(
+            context: context,
+                  builder: (BuildContext context) {
+                          return AlertDialog(
+                                    backgroundColor: Colors.pink[100],
+                                              title: Text('Congratulations you Win!'),
+                                                        content: Text("Do You Want To Continue ?"),
+                                                                  actions: <Widget>[
+                                                                              FlatButton(
+                                                                                            child: Text("YES"),
+                                                                                                          onPressed: () {
+                                                                                                                          setState(() {
+                                                                                                                                            transfer();
+                                                                                                                                                            });
+                                                                                                                                                                            Navigator.of(context).pop();
+                                                                                                                                                                                          },
+                                                                                                                                                                                                      ),
+          ],
+                  );
+                        },
+                            );
+                              }
+                                showAlertGAmeover(BuildContext context) {
+                                    showDialog(
+                                          context: context,
+                                                builder: (BuildContext context) {
+                                                        return AlertDialog(
+                                                                  title: Text('Game is Over!'),
+                                                                            content: Text("Do you want to play again?"),
+                                                                                      actions: <Widget>[
+                                                                                                  FlatButton(
+                                                                                                                child: Text("YES"),
+                                                                                                                              onPressed: () {
+                                                                                                                                              setState(() {
+                                                                                                                                                                restart();
+                                                                                                                                                                                });
+                                                                                                                                                                                                Navigator.of(context).pop();
+                                                                                                                                                                                                              },
+                                                                                                                                                                                                                          ),
+          ],
+                  );
+                        },
+                            );
+                              }
+                                void greatEqual(){
+                                    if(cardValue >= cVal1){
+                                          score++;
+                                                Future.delayed(Duration(milliseconds: 800), () {
+                                                        showAlert(context);
+                                                              });
+                                                                  }
+                                                                      else{
+                                                                            Future.delayed(Duration(milliseconds: 800), () {
+                                                                                    showAlertGAmeover(context);
+                                                                                          });
+                                                                                              }
+                                                                                                }
+                                                                                                  void lower(){
+                                                                                                      if(cardValue < cVal1){
+                                                                                                            score++;
+                                                                                                                  Future.delayed(Duration(milliseconds: 800), () {
+                                                                                                                          showAlert(context);
+                                                                                                                                });
+                                                                                                                                    }
+                                                                                                                                        else{
+                                                                                                                                              Future.delayed(Duration(milliseconds: 800), () {
+                                                                                                                                                      showAlertGAmeover(context);
+                                                                                                                                                            });
+                                                                                                                                                                }
+                                                                                                                                                                  }
+  @override
+    Widget build(BuildContext context) {
+        avoidFirstErorr();
+            return SafeArea(
+                  child: Stack(
+                            children: [
+                                        Positioned.fill(
+                                                        child: Opacity(
+                                                                          opacity: 0.3,
+                                                                                            child: Image.asset('assets//download5.jpg',
+                                                                                                                fit: BoxFit.cover,),
+                                                                                                                                )
+                                                                                                                                            ),
+                                                                                                                                                        Padding(
+                                                                                                                                                                      padding: const EdgeInsets.fromLTRB(30.0, 50.0, 30.0, 0.0),
+                                                                                                                                                                                    child: Column(
+                                                                                                                                                                                                    children: [
+                                                                                                                                                                                                                      SizedBox(height: 15.0,),
+                                                                                                                                                                                                                                        Text(
+                                                                                                                                                                                                                                                            'Score: $score',
+                                                                                                                                                                                                                                                                                style: TextStyle(
+                                                                                                                                                                                                                                                                                                      color: Colors.black,
+                                                                                                                                                                                                                                                                                                                            fontSize: 40.0,
+                                                                                                                                                                                                                                                                                                                                                  fontWeight: FontWeight.bold,
+                                                                                                                                                                                                                                                                                                                                                                        fontFamily: 'pcsenior',
+                                                                                                                                                                                                                                                                                                                                                                                            ),
+                                                                                                                                                                                                                                                                                                                                                                                                              ),
+                                                                                                                                                                                                                                                                                                                                                                                                                                SizedBox(height: 30.0,),
+                                                                                                                                                                                                                                                                                                                                                                                                                                                  Row(
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              children: <Widget>[
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      Container(
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                height: 120.0,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          width: 80.0,
+                          decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                          decoration: BoxDecoration(
+                  Ro
